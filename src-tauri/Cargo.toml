@@ -1,0 +1,28 @@
+[package]
+name = "aria-buddy"
+version = "0.1.0"
+description = "HelloAria desktop pet — todos, reminders, calendar and Aria chat on your desktop."
+authors = ["HelloAria"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["macos-private-api", "tray-icon", "image-png"] }
+tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri-plugin-http = "2.5.9"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# NSPanel conversion — per the Tauri maintainer, a plain NSWindow can never
+# reliably follow all Spaces / draw over full-screen apps; a panel can.
+tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2" }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
