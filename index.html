@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aria Buddy</title>
+    <link rel="stylesheet" href="/src/style.css" />
+</head>
+
+<body>
+    <!-- Everything is absolutely positioned inside a transparent window.
+         The pet sits at the bottom; the bubble floats above it; the panel
+         slides in above the pet when it's tapped. -->
+    <div id="app">
+        <div id="onboarding" class="hidden"></div>
+        <div id="panel" class="hidden"></div>
+        <div id="bubble" class="hidden"></div>
+        <div id="effects"></div>
+        <canvas id="pet" width="192" height="208" title="Aria Buddy"></canvas>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
