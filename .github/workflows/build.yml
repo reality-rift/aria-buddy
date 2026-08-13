@@ -19,6 +19,8 @@ jobs:
           - platform: windows-latest
             args: ""
     runs-on: ${{ matrix.platform }}
+    permissions:
+      contents: write # tauri-action creates the GitHub release + uploads assets
     steps:
       - uses: actions/checkout@v4
 
@@ -39,16 +41,11 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # macOS signing + notarization — set these repo secrets before a
-          # public release so the dmg opens without Gatekeeper warnings:
+          # NOTE: builds UNSIGNED for now. macOS users right-click -> Open on
+          # first launch. To sign + notarize later, add these repo secrets and
+          # tauri-action picks them up automatically:
           #   APPLE_CERTIFICATE, APPLE_CERTIFICATE_PASSWORD,
           #   APPLE_SIGNING_IDENTITY, APPLE_ID, APPLE_PASSWORD, APPLE_TEAM_ID
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           tagName: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
           releaseName: "Aria Buddy ${{ github.ref_name }}"
