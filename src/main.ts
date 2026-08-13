@@ -538,16 +538,22 @@ function renderSettings(): void {
                 const card = document.createElement("div");
                 card.className = "pet-mini";
                 card.innerHTML = `<img alt="" /><div class="pet-label">${escapeHtml(ourName)}</div>`;
-                // Previews stream through the Rust fetch -> blob URL; direct
-                // cross-origin <img> src from this host doesn't render here.
-                fetchPreviewObjectUrl(g.previewUrl)
-                    .then((blobUrl) => {
-                        const img = card.querySelector("img") as HTMLImageElement | null;
-                        if (!img) return URL.revokeObjectURL(blobUrl);
-                        img.onload = () => URL.revokeObjectURL(blobUrl);
-                        img.src = blobUrl;
-                    })
-                    .catch(() => card.classList.add("hidden"));
+                const img = card.querySelector("img") as HTMLImageElement | null;
+                if (img) {
+                    // Try the direct URL first — WebView2 (Windows) renders
+                    // cross-origin <img> fine. If it fails (WebKit/macOS is
+                    // pickier), fall back to a Rust-proxied blob URL.
+                    img.onerror = () => {
+                        img.onerror = null;
+                        fetchPreviewObjectUrl(g.previewUrl)
+                            .then((blobUrl) => {
+                                img.onload = () => URL.revokeObjectURL(blobUrl);
+                                img.src = blobUrl;
+                            })
+                            .catch(() => card.classList.add("hidden"));
+                    };
+                    img.src = g.previewUrl;
+                }
                 card.addEventListener("click", async () => {
                     const added = addCustomPet(ourName, g.spritesheetUrl, `gallery-${g.id}`);
                     saveConfig({ petId: added.id });

@@ -1,7 +1,7 @@
 {
   "name": "aria-buddy",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HelloAria desktop pet — your todos, reminders, calendar and Aria chat, living on your desktop.",
   "type": "module",
   "scripts": {

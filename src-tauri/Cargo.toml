@@ -1,6 +1,6 @@
 [package]
 name = "aria-buddy"
-version = "0.1.0"
+version = "0.1.1"
 description = "HelloAria desktop pet — todos, reminders, calendar and Aria chat on your desktop."
 authors = ["HelloAria"]
 edition = "2021"
