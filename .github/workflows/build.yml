@@ -41,11 +41,15 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # NOTE: builds UNSIGNED for now. macOS users right-click -> Open on
-          # first launch. To sign + notarize later, add these repo secrets and
-          # tauri-action picks them up automatically:
-          #   APPLE_CERTIFICATE, APPLE_CERTIFICATE_PASSWORD,
-          #   APPLE_SIGNING_IDENTITY, APPLE_ID, APPLE_PASSWORD, APPLE_TEAM_ID
+          # macOS Developer ID signing + notarization. tauri-action imports the
+          # cert and notarizes automatically when these are present. Windows
+          # ignores them (stays unsigned for now).
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           tagName: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
           releaseName: "Aria Buddy ${{ github.ref_name }}"
